@@ -52,6 +52,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import java.lang.reflect.Array.set
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +64,7 @@ fun CreateAccountScreen(MainViewModel: MainViewModel ) {
     val password : String by MainViewModel.password.observeAsState(initial ="")
 
     val phone: String by MainViewModel.phone.observeAsState(initial = "")
-    val type: String by MainViewModel.type.observeAsState(initial = "Pacientes")
+    val type: String by MainViewModel.type.observeAsState(initial = "")
     //var location by rememberSaveable { mutableStateOf("") }
 
     val isCreateEnable:Boolean by MainViewModel.isCreateEnable.observeAsState(initial = false)
@@ -244,59 +245,55 @@ fun FieldCreatePhone(phone: String, onTextChanged: (String) -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldCreateTypeDropdownMenu(type: String) {
-    val context = LocalContext.current
-    val typeUser = arrayOf("Pacientes", "Cuidadores")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(typeUser[0]) }
 
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var typeUser by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
-
+            .padding(top = 8.dp), contentAlignment = Alignment.Center
     ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            },
-            modifier = Modifier.fillMaxWidth()
-
-        ) {
+        ExposedDropdownMenuBox(expanded = isExpanded, onExpandedChange = { isExpanded = it }) {
             TextField(
-                value = selectedText,
+                value = typeUser,
                 onValueChange = {},
                 readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                label = { Text("Tipo de usuario") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth()
+                    .padding(top = 8.dp)
             )
-
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.fillMaxWidth()
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false }
             ) {
-                typeUser.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(text = item) },
-                        onClick = {
-                            selectedText = item
-                            expanded = false
-                            type = selectedText
-                            //assign a new value to the type parameter of the function
-                            //mensaje de toast para ver que opcion se selecciono
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                }
+                DropdownMenuItem(
+                    text = {
+                        Text(text = "Paciente")
+                    },
+                    onClick = {
+                        typeUser = "Paciente" // Update local state
+                        isExpanded = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(text = "Cuidador")
+                    },
+                    onClick = {
+                        typeUser = "Cuidador" // Update local state
+                        isExpanded = false
+                    }
+                )
             }
         }
     }
-    //return "$selectedText"
-
 }
 
 @Composable
