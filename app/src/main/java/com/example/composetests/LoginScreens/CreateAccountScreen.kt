@@ -68,6 +68,13 @@ fun CreateAccountScreen(MainViewModel: MainViewModel ) {
     //var location by rememberSaveable { mutableStateOf("") }
 
     val isCreateEnable:Boolean by MainViewModel.isCreateEnable.observeAsState(initial = false)
+    Log.d("CreateAccountScreen", "El nombre es: $password")
+    Log.d("CreateAccountScreen", "El nombre es: $email")
+    Log.d("CreateAccountScreen", "El nombre es: $lastname")
+    Log.d("CreateAccountScreen", "El nombre es: $name")
+    Log.d("CreateAccountScreen", "El nombre es: $phone")
+    Log.d("CreateAccountScreen", "El nombre es: $type")
+
 
 
 
@@ -86,27 +93,32 @@ fun CreateAccountScreen(MainViewModel: MainViewModel ) {
 
             item {
                 FieldCreateName(name = name, onTextChanged = { MainViewModel.onCreateAccountChange(email = email, password = password, name = it, lastname = lastname, phone = phone, type = type) })
+
             }
             item {
                 FieldCreateLastName(lastname = lastname, onTextChanged = { MainViewModel.onCreateAccountChange(email = email, password = password, name = name, lastname = it, phone = phone, type = type) })
+
             }
             item {
                     FieldCreateEmail(email = email, onTextChanged = { MainViewModel.onCreateAccountChange(email = it, password = password, name = name, lastname = lastname, phone = phone, type = type)})
+
             }
             item {
                     FieldCreatePassword(password = password, onTextChanged = { MainViewModel.onCreateAccountChange(email = email, password = it, name = name, lastname = lastname, phone = phone, type = type) })
+
             }
             item {
                 FieldCreatePhone(phone = phone, onTextChanged = { MainViewModel.onCreateAccountChange(email = email, password = password, name = name, lastname = lastname, phone = it, type = type) })
+
             }
             item {
-                FieldCreateTypeDropdownMenu(type = type)
-                Log.d("CreateAccountScreen", "El tipo de usuario es: $type")
+                FieldCreateTypeDropdownMenu(type = type, onUpdateType = { newType -> MainViewModel.onUpdateType(newType) })
             }/*
             item {
                 FieldCreateGoogleMap(location = location)
             }*/
             item {
+
                 CreateAccountButton(isCreateEnable = isCreateEnable, onClic = {MainViewModel.createUser(email = email, password = password)})
                 }
             }
@@ -244,7 +256,7 @@ fun FieldCreatePhone(phone: String, onTextChanged: (String) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FieldCreateTypeDropdownMenu(type: String) {
+fun FieldCreateTypeDropdownMenu(type: String, onUpdateType: (String) -> Unit){
 
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     var typeUser by rememberSaveable { mutableStateOf("") }
@@ -278,8 +290,9 @@ fun FieldCreateTypeDropdownMenu(type: String) {
                         Text(text = "Paciente")
                     },
                     onClick = {
-                        typeUser = "Paciente" // Update local state
+                        typeUser = "Paciente"
                         isExpanded = false
+                        onUpdateType(typeUser)
                     }
                 )
                 DropdownMenuItem(
@@ -289,6 +302,7 @@ fun FieldCreateTypeDropdownMenu(type: String) {
                     onClick = {
                         typeUser = "Cuidador" // Update local state
                         isExpanded = false
+                        onUpdateType(typeUser)
                     }
                 )
             }

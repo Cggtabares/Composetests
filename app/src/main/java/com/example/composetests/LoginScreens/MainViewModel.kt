@@ -49,6 +49,10 @@ class MainViewModel : ViewModel() {
     private val _isCreateEnable = MutableLiveData<Boolean>()
     val isCreateEnable: LiveData<Boolean> = _isCreateEnable
 
+    fun onUpdateType(newType: String) {
+        _type.value = newType
+    }
+
 
     //Reflejar los cambios realizados en pantalla y habilitar el boton de crear cuenta, tambien puede servir para hacer login
     fun onCreateAccountChange(
