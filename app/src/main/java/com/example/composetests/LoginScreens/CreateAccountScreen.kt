@@ -106,7 +106,7 @@ fun CreateAccountScreen(MainViewModel: MainViewModel ) {
                 FieldCreateTypeDropdownMenu(type = type, onUpdateType = { newType -> MainViewModel.onUpdateType(newType) })
             }
             item{
-                AcquireLocationButton()
+                //AcquireLocationButton()
             }
             item {
                 FieldCreateGoogleMap(location = location)
