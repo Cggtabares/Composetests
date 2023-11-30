@@ -1,16 +1,18 @@
 package com.example.composetests.Model
 
 import android.location.Location
+import com.google.android.gms.maps.model.LatLng
 
 data class User(
     val uid: String,
     val name: String,
     val lastName: String,
     val email: String,
-    val phone: Int,
+    val phone: String,
     val type: String,
-    val location: String?,
+    val firstlocation: Location?,
     val cuidadorId: String?,
+    val lastLocation: Location?
 
     ){
 
@@ -22,7 +24,8 @@ data class User(
             "email" to this.email,
             "phone" to this.phone,
             "type" to this.type,
-            "location" to this.location,
+            "location" to this.firstlocation,
+            "lastLocation" to this.lastLocation,
             "cuidadorId" to this.cuidadorId
         )
 
